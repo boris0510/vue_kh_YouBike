@@ -1,4 +1,4 @@
-# vue_kh_youbike
+# vue_kh_YouBike
 
 ## Project setup
 ```
