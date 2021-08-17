@@ -1,26 +1,27 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h1>高雄YouBike2.0公共自行車租賃站即時資訊</h1>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
-
 export default {
   name: 'App',
-  components: {
-    HelloWorld,
+  data() {
+    return {
+      data: [],
+      updatedTime: '',
+    };
+  },
+  mounted() {
+    const api = 'http://od-oas.kcg.gov.tw/api/service/Get/b4dd9c40-9027-4125-8666-06bef1756092';
+    this.axios.get(api).then((response) => {
+      this.data = response.data.data.retVal;
+      this.updatedTime = response.data.data.updated_at;
+      console.log(response);
+    });
   },
 };
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+@import 'bootstrap';
 </style>
