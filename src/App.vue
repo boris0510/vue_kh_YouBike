@@ -1,5 +1,6 @@
 <template>
   <h1>高雄YouBike2.0公共自行車租賃站即時資訊</h1>
+  <a class="btn btn-primary btn-sm " href="#" role="button">123</a>
 </template>
 
 <script>
@@ -23,5 +24,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import 'bootstrap';
+@import './assets/scss/all.scss';
 </style>
