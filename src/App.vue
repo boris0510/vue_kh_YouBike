@@ -24,7 +24,7 @@
           </div>
           <div class="card-footer text-muted d-flex justify-content-between align-items-center">
             更新時間 : {{ item.updated }}
-            <small><a :href="item.map" target="_blank">查看地圖</a></small>
+            <small><a :href="item.map" target="_blank" class="text-decoration-none">查看地圖</a></small>
           </div>
         </div>
       </div>
@@ -35,18 +35,18 @@
       <ul class="pagination">
         <li class="page-item">
           <a class="page-link" href="#" aria-label="Previous"
-            @click.prevent="currentPage === 0 ? (currentPage = 0) : (currentPage -= 1)"
+            @click="currentPage === 0 ? (currentPage = 0) : (currentPage -= 1)"
           >
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
         <li class="page-item" :class="{ active: currentPage === page - 1 }"
         v-for="(page, index) in filterData.length" :key="index">
-          <a class="page-link" href="#" @click.prevent="currentPage = page - 1">{{ page }}</a>
+          <a class="page-link" href="#" @click="currentPage = page - 1">{{ page }}</a>
         </li>
         <li class="page-item">
           <a class="page-link" href="#" aria-label="Next"
-            @click.prevent="
+            @click="
               currentPage === filterData.length - 1
               ? (currentPage = filterData.length - 1)
               : (currentPage += 1)
@@ -58,11 +58,17 @@
       </ul>
     </nav>
   </div>
+  <Footer />
 </template>
 
 <script>
+import Footer from './components/Footer.vue';
+
 export default {
   name: 'App',
+  components: {
+    Footer,
+  },
   data() {
     return {
       data: [],
