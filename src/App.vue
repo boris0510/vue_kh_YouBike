@@ -1,9 +1,13 @@
 <template>
   <div class="container mt-4">
     <div class="d-flex justify-content-center align-items-center">
-      <h1 class="fs-2">高雄 YouBike2.0 公共自行車租賃站即時資訊</h1>
+      <h1>高雄 YouBike2.0 公共自行車租賃站即時資訊</h1>
     </div>
     <!-- 內容 -->
+    <select name="" id="" class="form-select input-lg mt-4" v-model="currentLocation">
+      <option value="">--- 全部 ---</option>
+      <option :value="item" v-for="(item, index) in locations" :key="index">{{ item }}</option>
+    </select>
     <div class="row mt-4">
       <div class="col-4 mb-4" v-for="(item, index) in filterData[currentPage]" :key="index">
         <div class="card h-100">
@@ -58,12 +62,29 @@ export default {
       data: [],
       updatedTime: '',
       currentPage: 0,
+      locations: [],
+      currentLocation: '',
     };
+  },
+  methods: {
+    getLocations() {
+      const locations = new Set();
+      this.data.forEach((item) => {
+        locations.add(item.sarea);
+      });
+      this.locations = Array.from(locations);
+    },
   },
   computed: {
     filterData() {
+      let items = [];
+      if (this.currentLocation !== '') {
+        items = this.data.filter((item) => item.sarea === this.currentLocation);
+      } else {
+        items = this.data;
+      }
       const newData = [];
-      this.data.forEach((item, index) => {
+      items.forEach((item, index) => {
         // 一頁 39 筆，算有幾頁
         if (index % 39 === 0) {
           newData.push([]);
@@ -87,7 +108,7 @@ export default {
     this.axios.get(api).then((response) => {
       this.data = response.data.data.retVal;
       this.updatedTime = response.data.data.updated_at;
-      console.log(response);
+      this.getLocations();
     });
   },
 };
