@@ -1,15 +1,36 @@
 <template>
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-end">
-      <h1>高雄YouBike2.0公共自行車租賃站即時資訊</h1>
-      <p>更新時間 : {{ updatedTime }}</p>
+  <div class="container mt-4">
+    <div class="d-flex justify-content-center align-items-center">
+      <h1 class="fs-2">高雄 YouBike2.0 公共自行車租賃站即時資訊</h1>
     </div>
-    {{ filterData[currentPage] }}
+    <!-- 內容 -->
+    <div class="row mt-4">
+      <div class="col-4 mb-4" v-for="(item, index) in filterData[currentPage]" :key="index">
+        <div class="card h-100">
+          <iframe height="200" :src="item.map"></iframe>
+          <div class="card-body">
+            <p class="card-text">
+              站號 : {{ item.sno }} <br>
+              地點 : {{ item.scity }}{{ item.sarea }} {{ item.ar }} <br>
+              總車位 : {{ item.tot }} 格 <br>
+              可還車位 : {{ item.bemp }} 格 <br>
+              可借車輛 : {{ item.sbi }} 輛
+            </p>
+          </div>
+          <div class="card-footer text-muted d-flex justify-content-between align-items-center">
+            更新時間 : {{ item.updated }}
+            <small><a :href="item.map">查看地圖</a></small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- {{ filterData[currentPage] }} -->
     <!-- 分頁 -->
-    <nav aria-label="Page navigation example">
+    <nav class="d-flex justify-content-center mt-4" aria-label="Page navigation">
       <ul class="pagination" >
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Previous">
+          <a class="page-link" href="#" aria-label="Previous"
+          @click.prevent="currentPage === 0 ? currentPage = 0 : currentPage -= 1">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
@@ -18,7 +39,9 @@
           <a class="page-link" href="#" @click.prevent="currentPage = page - 1">{{ page }}</a>
         </li>
         <li class="page-item">
-          <a class="page-link" href="#" aria-label="Next">
+          <a class="page-link" href="#" aria-label="Next"
+          @click.prevent="
+          currentPage === filterData.length-1 ? currentPage = filterData.length-1 : currentPage+=1">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
@@ -35,20 +58,26 @@ export default {
       data: [],
       updatedTime: '',
       currentPage: 0,
-      pagination: {},
     };
   },
   computed: {
     filterData() {
       const newData = [];
       this.data.forEach((item, index) => {
-        // 有幾頁
-        if (index % 40 === 0) {
+        // 一頁 39 筆，算有幾頁
+        if (index % 39 === 0) {
           newData.push([]);
         }
         // 每頁內容
-        const page = parseInt(index / 40, 0);
-        newData[page].push(item);
+        const page = parseInt(index / 39, 0);
+        const updated = `${item.mday.substr(0, 4)}-${item.mday.substr(4, 2)}-${item.mday.substr(6, 2)} ${item.mday.substr(8, 2)}:${item.mday.substr(10, 2)}`;
+        const map = `https://www.openstreetmap.org/export/embed.html?bbox=${item.lng}%2C${item.lat}&layer=mapnik&marker=${item.lat}%2C${item.lng}`;
+        const newItem = {
+          ...item,
+          updated,
+          map,
+        };
+        newData[page].push(newItem);
       });
       return newData;
     },
