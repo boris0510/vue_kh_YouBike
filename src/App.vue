@@ -19,7 +19,7 @@
           </div>
           <div class="card-footer text-muted d-flex justify-content-between align-items-center">
             更新時間 : {{ item.updated }}
-            <small><a :href="item.map">查看地圖</a></small>
+            <small><a :href="item.map" target="_blank">查看地圖</a></small>
           </div>
         </div>
       </div>
