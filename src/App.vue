@@ -2,7 +2,7 @@
   <Loading v-model:active="isLoading" />
   <div class="container mt-4">
     <div class="d-flex justify-content-center align-items-center">
-      <h1>高雄 YouBike2.0 公共自行車租賃站即時資訊</h1>
+      <h1>高雄 YouBike2.0 即時資訊</h1>
     </div>
     <!-- 內容 -->
     <select name="" id="" class="form-select input-lg mt-4" v-model="currentLocation">
