@@ -29,7 +29,6 @@
         </div>
       </div>
     </div>
-    <!-- {{ filterData[currentPage] }} -->
     <!-- 分頁 -->
     <nav class="d-flex justify-content-center mt-4" aria-label="Page navigation">
       <ul class="pagination">
@@ -40,9 +39,10 @@
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li class="page-item" :class="{ active: currentPage === page - 1 }"
-        v-for="(page, index) in filterData.length" :key="index">
-          <a class="page-link" href="#" @click.prevent="currentPage = page - 1">{{ page }}</a>
+        <li class="page-item" :class="{ active: currentPage === currentPage }">
+          <a class="page-link" href="#" @click.prevent="currentPage = currentPage">
+            {{ currentPage + 1 }}
+          </a>
         </li>
         <li class="page-item" :class="{'disabled ': currentPage === filterData.length - 1}">
           <a class="page-link" href="#" aria-label="Next"
@@ -111,12 +111,12 @@ export default {
       }
       const newData = [];
       items.forEach((item, index) => {
-        // 一頁 50 筆，算有幾頁
-        if (index % 50 === 0) {
+        // 一頁 39 筆，算有幾頁
+        if (index % 39 === 0) {
           newData.push([]);
         }
         // 每頁內容
-        const page = parseInt(index / 50, 0);
+        const page = parseInt(index / 39, 0);
         const updated = `${item.mday.substr(0, 4)}-${item.mday.substr(4, 2)}-${item.mday.substr(6, 2)} ${item.mday.substr(8, 2)}:${item.mday.substr(10, 2)}`;
         const map = `https://www.openstreetmap.org/export/embed.html?bbox=${item.lng}%2C${item.lat}&layer=mapnik&marker=${item.lat}%2C${item.lng}`;
         const newItem = {
