@@ -10,7 +10,7 @@
       <option :value="item" v-for="(item, index) in locations" :key="index">{{ item }}</option>
     </select>
     <div class="row mt-4">
-      <div class="col-4 mb-4" v-for="(item, index) in filterData[currentPage]" :key="index">
+      <div class="col-md-4 mb-4" v-for="(item, index) in filterData[currentPage]" :key="index">
         <div class="card h-100">
           <iframe height="200" :src="item.map"></iframe>
           <div class="card-body">
@@ -33,24 +33,20 @@
     <!-- 分頁 -->
     <nav class="d-flex justify-content-center mt-4" aria-label="Page navigation">
       <ul class="pagination">
-        <li class="page-item">
+        <li class="page-item" :class="{'disabled ': currentPage === 0}">
           <a class="page-link" href="#" aria-label="Previous"
-            @click="currentPage === 0 ? (currentPage = 0) : (currentPage -= 1)"
+            @click.prevent="currentPage -= 1"
           >
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
         <li class="page-item" :class="{ active: currentPage === page - 1 }"
         v-for="(page, index) in filterData.length" :key="index">
-          <a class="page-link" href="#" @click="currentPage = page - 1">{{ page }}</a>
+          <a class="page-link" href="#" @click.prevent="currentPage = page - 1">{{ page }}</a>
         </li>
-        <li class="page-item">
+        <li class="page-item" :class="{'disabled ': currentPage === filterData.length - 1}">
           <a class="page-link" href="#" aria-label="Next"
-            @click="
-              currentPage === filterData.length - 1
-              ? (currentPage = filterData.length - 1)
-              : (currentPage += 1)
-            "
+            @click.prevent="currentPage += 1"
           >
             <span aria-hidden="true">&raquo;</span>
           </a>
@@ -59,14 +55,17 @@
     </nav>
   </div>
   <Footer />
+  <GoTop />
 </template>
 
 <script>
 import Footer from './components/Footer.vue';
+import GoTop from './components/GoTop.vue';
 
 export default {
   name: 'App',
   components: {
+    GoTop,
     Footer,
   },
   data() {
@@ -112,12 +111,12 @@ export default {
       }
       const newData = [];
       items.forEach((item, index) => {
-        // 一頁 39 筆，算有幾頁
-        if (index % 39 === 0) {
+        // 一頁 50 筆，算有幾頁
+        if (index % 50 === 0) {
           newData.push([]);
         }
         // 每頁內容
-        const page = parseInt(index / 39, 0);
+        const page = parseInt(index / 50, 0);
         const updated = `${item.mday.substr(0, 4)}-${item.mday.substr(4, 2)}-${item.mday.substr(6, 2)} ${item.mday.substr(8, 2)}:${item.mday.substr(10, 2)}`;
         const map = `https://www.openstreetmap.org/export/embed.html?bbox=${item.lng}%2C${item.lat}&layer=mapnik&marker=${item.lat}%2C${item.lng}`;
         const newItem = {
